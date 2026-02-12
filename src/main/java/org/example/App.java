@@ -71,13 +71,20 @@ public class App {
                     break;
                 }
             }
-
+            if (inputHandler.isSpeedDownHeld()){
+                if (stepsPerSecond > 0) {
+                    stepsPerSecond--;
+                }
+            }
+            if (inputHandler.isSpeedUpHeld()){
+                stepsPerSecond++;
+            }
             if (shouldStep || !isPaused){
                 acc += dt;
                 if (acc >= 1.0 / stepsPerSecond){
                     cellular.step();
                     acc -= 1.0 / stepsPerSecond;
-                }
+               }
             } else{
                 acc = 0;
             }

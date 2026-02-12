@@ -10,6 +10,9 @@ public class InputHandler {
 
     private final Map<Integer, InputState> map = new HashMap<>();
 
+    private boolean speedUpHeld;
+    private boolean speedDownHeld;
+
     public InputHandler(){
         init();
     }
@@ -25,7 +28,16 @@ public class InputHandler {
     }
 
     public InputState update(Raylib raylib){
+        speedDownHeld = raylib.core.IsKeyDown(Keyboard.KEY_S);
+        speedUpHeld = raylib.core.IsKeyDown(Keyboard.KEY_W);
         return map.getOrDefault(raylib.core.GetKeyPressed(), null);
     }
 
+    public boolean isSpeedDownHeld() {
+        return speedDownHeld;
+    }
+
+    public boolean isSpeedUpHeld() {
+        return speedUpHeld;
+    }
 }
