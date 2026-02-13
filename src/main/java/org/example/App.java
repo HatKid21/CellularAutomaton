@@ -9,19 +9,23 @@ public class App {
     private final Cellular cellular;
     private final Renderer renderer;
 
+    private boolean showGeneration;
+
     private double stepsPerSecond = 60;
 
-    private boolean isPaused = false;
-    private boolean isRunning = false;
+    private boolean isPaused;
+    private boolean isRunning;
 
     public App(){
+        this.isPaused = true;
+        this.isRunning = false;
         this.cellular = new Cellular(50,50);
         cellular.fillRandom();
         this.inputHandler = new InputHandler();
         this.raylib = new Raylib(800,600,"Cellular Automaton by HatKid");
         raylib.core.SetTargetFPS(60);
         this.renderer = new Renderer(raylib,5);
-        renderer.showGeneration();
+        showGeneration = true;
     }
 
     public void run(){
@@ -79,7 +83,12 @@ public class App {
             if (inputHandler.isSpeedUpHeld()){
                 stepsPerSecond++;
             }
-            if (shouldStep || !isPaused){
+
+            if (shouldStep && isPaused){
+                cellular.step();
+            }
+
+            if (!isPaused){
                 acc += dt;
                 if (acc >= 1.0 / stepsPerSecond){
                     cellular.step();
@@ -87,6 +96,14 @@ public class App {
                }
             } else{
                 acc = 0;
+            }
+
+            if (showGeneration){
+                renderer.drawGeneration(cellular);
+            }
+
+            if (isPaused){
+                renderer.drawPaused(800);
             }
 
             drawNextStep();
