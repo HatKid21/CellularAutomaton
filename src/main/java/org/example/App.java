@@ -13,17 +13,18 @@ public class App {
 
     private double stepsPerSecond = 60;
 
+    private final int FPS = 60;
     private boolean isPaused;
     private boolean isRunning;
 
     public App(){
         this.isPaused = true;
         this.isRunning = false;
-        this.cellular = new Cellular(50,50);
+        this.cellular = new Cellular(150,110);
         cellular.fillRandom();
         this.inputHandler = new InputHandler();
         this.raylib = new Raylib(800,600,"Cellular Automaton by HatKid");
-        raylib.core.SetTargetFPS(60);
+        raylib.core.SetTargetFPS(FPS);
         this.renderer = new Renderer(raylib,5);
         showGeneration = true;
     }
@@ -35,7 +36,6 @@ public class App {
 
         while (!raylib.core.WindowShouldClose()){
             double dt = raylib.core.GetFrameTime();
-            System.out.println(stepsPerSecond);
             InputState state = inputHandler.update(raylib);
             boolean shouldStep = false;
             switch (state){
@@ -61,16 +61,6 @@ public class App {
                     raylib.core.CloseWindow();
                     return;
                 }
-                case SPEED_UP: {
-                    stepsPerSecond++;
-                    break;
-                }
-                case SPEED_DOWN:{
-                    if (stepsPerSecond != 0) {
-                        stepsPerSecond--;
-                    }
-                    break;
-                }
                 case null, default :{
                     break;
                 }
@@ -81,7 +71,9 @@ public class App {
                 }
             }
             if (inputHandler.isSpeedUpHeld()){
-                stepsPerSecond++;
+                if (stepsPerSecond != 60) {
+                    stepsPerSecond++;
+                }
             }
 
             if (shouldStep && isPaused){
@@ -106,6 +98,7 @@ public class App {
                 renderer.drawPaused(800);
             }
 
+            renderer.drawSpeed(stepsPerSecond);
             drawNextStep();
 
         }

@@ -70,4 +70,8 @@ public class Renderer {
         r.core.EndDrawing();
     }
 
+    public void drawSpeed(double speed){
+        r.text.DrawText("Speed: " + speed, 0,0,20,Color.PINK);
+    }
+
 }
